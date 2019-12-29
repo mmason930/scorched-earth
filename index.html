@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<body>
+	<center>
+		<canvas id="canvas"></canvas>
+	</center>
+	
+	<script type="text/javascript" src="./sylvester.js"></script>
+	<script type="text/javascript" src="./render-util.js"></script>
+	<script type="text/javascript" src="./tank.js"></script>
+	<script type="text/javascript" src="./missile.js"></script>
+	<script type="text/javascript" src="./terrain.js"></script>
+	<script type="text/javascript" src="./game.js"></script>
+
+	<script id="frag-color-shader" type="x-shader/x-fragment">
+		uniform sampler2D uSampler;
+		varying highp vec2 vTextureCoord;
+		
+		void main(void) {
+			
+			mediump vec4 textureColor = texture2D(uSampler, vTextureCoord);
+			
+			if(vec3(textureColor) == vec3(0.00, 0.00, 0.00))
+				discard;
+				//gl_FragColor = vec4(0.10, 0.10, 0.10, 1.00);
+			else
+				gl_FragColor = vec4(0.00, 1.00, 0.00, 1.00);
+		}
+	</script>
+
+	<script id="vertex-shader" type="x-shader/x-vertex">
+		attribute vec2 coordinates;
+		attribute vec2 aTextureCoord;
+		varying highp vec2 vTextureCoord;
+		
+		void main(void) {
+			gl_Position = vec4(coordinates, 0.0, 1.0);
+			vTextureCoord = aTextureCoord;
+		}
+	</script>
+	
+	<script id="main-frag" type="x-shader/x-fragment">
+		precision mediump float;
+		varying vec4 vColor;
+		void main(void) {
+			gl_FragColor = vColor;
+		}
+	</script>
+
+	<script id="main-vert"" type="x-shader/x-vertex">
+		attribute vec2 coordinates;
+		attribute vec4 polyColor;
+		
+		varying vec4 vColor;
+		void main(void) {
+			gl_Position = vec4(coordinates, 0.0, 1.0);
+			vColor=polyColor;
+		}
+	</script>
+	
+	<div style="display:none;" id="tankTurn"></div>
+	<div style="display:none;" id="status"></div>
+
+	<script type="text/javascript">
+	   game.setup();
+	</script>
+</body>
+</html>
